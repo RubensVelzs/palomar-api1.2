@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://palomar:palomarTest&123@localhost:5432/palomar"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  avatar    String
+  email     String    @unique
+  isAdmin   Boolean   @default(false)
+  isOfficer Boolean   @default(false)
+  isShief   Boolean   @default(false)
+  isOwner   Boolean   @default(false)
+  lastname  String
+  name      String
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  residences Residence[]
+}
+
+model PropertyType {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  residences Residence[]
+}
+
+model Coto {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  residences Residence[]
+}
+
+model ControllAccessEvent {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  controllAccesses ControllAccess[]
+}
+
+model ControllAccess {
+  id                    Int                 @id @default(autoincrement())
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime?           @updatedAt
+  controllAccessEvent   ControllAccessEvent @relation(fields: [controllAccessEventId], references: [id])
+  controllAccessEventId Int
+  vehicle               Vehicle             @relation(fields: [vehicleId], references: [id])
+  vehicleId             Int
+}
+
+model Residence {
+  id             Int          @id @default(autoincrement())
+  block          String
+  extNumber      Int
+  land           String
+  isActive       Boolean      @default(true)
+  street         String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime?    @updatedAt
+  coto           Coto         @relation(fields: [cotoId], references: [id])
+  cotoId         Int
+  propertyType   PropertyType @relation(fields: [propertyTypeId], references: [id])
+  propertyTypeId Int
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int
+
+  vehicles Vehicle[]
+}
+
+model Vehicle {
+  id        Int       @id @default(autoincrement())
+  carPlate  String    @unique
+  brand     String
+  color     String?
+  tag       String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  residence   Residence @relation(fields: [residenceId], references: [id])
+  residenceId Int
+
+  controlAccess ControllAccess[]
+}
