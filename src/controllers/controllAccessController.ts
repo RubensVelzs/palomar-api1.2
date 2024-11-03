@@ -31,7 +31,7 @@ export const createControllAccess = async (req: Request, res: Response) => {
                 });
                 return res.status(200).json({
                     ok: true,
-                    message: "¡Bienvenido!"
+                    message: controllAccessEventId===1?"¡Bienvenido!":"Vuelve pronto"
                 });
     
             }else{
