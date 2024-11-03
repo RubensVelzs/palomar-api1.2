@@ -23,7 +23,7 @@ export const createControllAccess = async (req: Request, res: Response) => {
 
         if(vehicle){
             if (vehicle?.residence.isActive) {
-                const controllAccess = await prisma.controllAccess.create({
+                await prisma.controllAccess.create({
                     data: {
                        controllAccessEventId,
                        vehicleId: vehicle.id,
@@ -31,19 +31,19 @@ export const createControllAccess = async (req: Request, res: Response) => {
                 });
                 return res.status(200).json({
                     ok: true,
-                    controllAccess
+                    message: "¡Bienvenido!"
                 });
     
             }else{
                 return res.status(401).json({
                     ok: false,
-                    message:"Your residence has pending payments or is inactive."
+                    message:"Tu residencia tiene pagos pendientes o esta inactiva"
                 });
             }
         }else{
             return res.status(404).json({
                 ok: false,
-                message:"Vehicle not found."
+                message:"Vehiculo no encontrado."
             });
         }
         
