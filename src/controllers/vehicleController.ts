@@ -38,8 +38,8 @@ export const createVehicle = async (req: Request, res: Response) => {
         if (residenceTotalVehicles?._count.vehicles !== 10) {
             let tag = carPlate.replaceAll('-', '');
 
-            if (16 - tag.length !== 0) {
-                for (let i = tag.length; i < 16; i++) {
+            if (12 - tag.length !== 0) {
+                for (let i = tag.length; i < 12; i++) {
                     tag += '0';
                 }
             }
