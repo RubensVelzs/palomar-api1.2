@@ -6,6 +6,8 @@ import { getOfficer, prisma } from '../helpers';
 export const createControllAccess = async (req: Request, res: Response) => {
     const { tag, carPlate, controllAccessEventId } = req.body;
     try {
+
+        const parsedControllAccessEventId= Number(controllAccessEventId);
        
         const vehicle = await prisma.vehicle.findUnique({
             where:{
@@ -25,13 +27,13 @@ export const createControllAccess = async (req: Request, res: Response) => {
             if (vehicle?.residence.isActive) {
                 await prisma.controllAccess.create({
                     data: {
-                       controllAccessEventId,
+                       controllAccessEventId:parsedControllAccessEventId,
                        vehicleId: vehicle.id,
                     },
                 });
                 return res.status(200).json({
                     ok: true,
-                    message: controllAccessEventId===1?"¡Bienvenido!":"Vuelve pronto"
+                    message: parsedControllAccessEventId===1?"¡Bienvenido!":"Vuelve pronto"
                 });
     
             }else{
