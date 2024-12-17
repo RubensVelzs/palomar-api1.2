@@ -44,7 +44,7 @@ export const getResidences = async(req:Request, res:Response)=>{
             message: "Unauthorized"
         });
 
-        const users = await prisma.residence.findMany({
+        const residences = await prisma.residence.findMany({
             include:{
                 user:{
                     omit: {password:true}
@@ -56,7 +56,7 @@ export const getResidences = async(req:Request, res:Response)=>{
         });
         return res.status(200).json({
             ok:true,
-            users
+            data:residences
         })
     } catch (error) {
         return res.status(500).json({
@@ -93,7 +93,7 @@ export const getResidence = async(req:Request, res:Response)=>{
 
         return res.status(200).json({
             ok:true,
-            residence
+            data:residence
         })
     } catch (error) {
         return res.status(500).json({
