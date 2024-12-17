@@ -1,5 +1,5 @@
 import { Response, Request } from "express"
-import { createAccessToken, prisma } from '../helpers';
+import { createAccessToken, getAdminOrOwner, prisma } from '../helpers';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -100,6 +100,13 @@ export const verify = async (req: Request, res: Response) => {
 
 export const getUsers = async (req:Request, res: Response)=>{
     try {
+        const userFound = await getAdminOrOwner(req.body.user);
+
+        if(!userFound) return res.status(401).json({
+            ok:false,
+            message:"Unauthorized"
+        });
+        
         const users = await prisma.user.findMany();
         return res.json({
             ok: true,
